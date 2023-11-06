@@ -1,0 +1,120 @@
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class Huffman {
+
+
+    public static void printCode(HuffmanNodeEncoding root, String s)
+    {
+
+
+        if (root.left == null && root.right == null
+                && Character.isLetter(root.c)) {
+
+            // c is the character in the node
+            System.out.println(root.c + ":" + s);
+
+            return;
+        }
+
+         //left then add "0" to the code.
+        // right add"1" to the code.
+
+
+        printCode(root.left, s + "0");
+        printCode(root.right, s + "1");
+    }
+
+
+    public static void main(String[] args)
+    {
+
+        Scanner s = new Scanner(System.in);
+
+
+        int n = 6;
+        char[] charArray = { 'a', 'b', 'c', 'd', 'e', 'f' };
+        int[] charfreq = { 5, 9, 12, 13, 16, 45 };
+
+        // creating a priority queue q.
+
+        PriorityQueue<HuffmanNodeEncoding> q
+                = new PriorityQueue<HuffmanNodeEncoding>(
+                n, new MyComparator());
+
+        for (int i = 0; i < n; i++) {
+
+
+            HuffmanNodeEncoding hn = new HuffmanNodeEncoding();
+
+            hn.c = charArray[i];
+            hn.data = charfreq[i];
+
+            hn.left = null;
+            hn.right = null;
+
+            // add huffman node to the queue
+
+            q.add(hn);
+        }
+
+
+        HuffmanNodeEncoding root = null;
+
+
+        while (q.size() > 1) {
+
+
+            HuffmanNodeEncoding x = q.peek();
+            q.poll();
+
+
+            HuffmanNodeEncoding y = q.peek();
+            q.poll();
+
+
+            HuffmanNodeEncoding f = new HuffmanNodeEncoding();
+
+
+            f.data = x.data + y.data;
+            f.c = '-';
+
+
+            f.left = x;
+
+
+            f.right = y;
+
+
+            root = f;
+
+
+            q.add(f);
+        }
+
+
+        printCode(root, "");
+    }
+}
+
+
+class HuffmanNodeEncoding {
+
+    int data;
+    char c;
+
+    HuffmanNodeEncoding left;
+    HuffmanNodeEncoding right;
+}
+
+
+class MyComparator implements Comparator<HuffmanNodeEncoding> {
+    public int compare(HuffmanNodeEncoding x, HuffmanNodeEncoding y)
+    {
+
+        return x.data - y.data;
+    }
+}
+
+
